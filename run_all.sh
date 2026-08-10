@@ -11,8 +11,10 @@ if [ "${1:-}" = "--regen" ]; then
 fi
 
 fail=0
-for dir in medium/*/ hard/*/; do
+for dir in medium/*/ hard/*/ rev/*/; do
     name="${dir%/}"
+    # rev/dist/ is generated hand-out material, not a challenge
+    [ -f "$dir/solve.py" ] || continue
     printf '=== %-32s ' "$name"
     if out=$(cd "$dir" && timeout 600 python3 solve.py 2>&1) \
        && flag=$(grep -o 'THJCC{[^}]*}' <<<"$out" | tail -1) \
